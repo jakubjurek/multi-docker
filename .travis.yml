@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jakubjurek/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run jakubjurek/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t jakubjurek/multi-client ./client
+  - docker build -t jakubjurek/multi-nginx ./nginx
+  - docker build -t jakubjurek/multi-server ./server
+  - docker build -t jakubjurek/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push jakubjurek/multi-client
+  - docker push jakubjurek/multi-nginx
+  - docker push jakubjurek/multi-server
+  - docker push jakubjurek/multi-worker
