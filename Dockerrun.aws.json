@@ -10,7 +10,7 @@
     },
     {
       "name" : "nginx",
-      "image" : "jakubjurek/multi-iginx",
+      "image" : "jakubjurek/multi-nginx",
       "essential" : true,
       "portMappings": [
         {
